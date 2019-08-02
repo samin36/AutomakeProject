@@ -46,6 +46,8 @@ class CreateProject():
             os.chdir(self.directory)
             os.mkdir(self.proj_name)
             os.chdir(f"./{self.proj_name}")
+            print(self.description)
+            print(repr(self.description))
             if self.upload:
                 self.setup_github_repo()
             if self.open_project:
