@@ -21,7 +21,6 @@ class CreateProject():
         """
         try:
             self.github_obj = Github(username.strip(), password.strip())
-            print(self.github_obj.get_user().id)
             return True
         except GithubException:
             return False
@@ -32,11 +31,11 @@ class CreateProject():
         a boolean variable upload (True=upload to github, False=otherwise),
         and the directory
         """
-        self.proj_name = proj_name
-        self.description = description
+        self.proj_name = proj_name.strip()
+        self.description = description.strip()
         self.private_mode = True if mode.upper() == "PRIVATE" else False
         self.upload = upload
-        self.directory = directory
+        self.directory = directory.strip()
         self.open_project = open_project
 
         self.create_directory()
@@ -71,7 +70,8 @@ class CreateProject():
         self.git_command(f"git remote add origin {url}")
         self.git_command("git add .")
         self.git_command('git commit -m "Initial Commit"')
-        self.git_commmand("git push -u origin master")
+        self.git_command("git push -u origin master")
+        self.git_command(f"start /max {url}")
 
     def git_command(self, command):
         """ Helper method that executes commands in bash shell """

@@ -63,7 +63,7 @@ class CreateGUI:
             self.frame, text="Create", command=self.create_project, width=6, font="Helvetica 16")
         self.create_button.grid(row=10, column=2, pady=(0, 5), sticky=E)
 
-        self.upload_mode = StringVar(value="PUBLIC")
+        self.upload_mode = StringVar(value="Public")
         self.upload_mode_public = Radiobutton(self.frame, text="Public", value="PUBLIC", variable=self.upload_mode,
                                          font="Helvetica 14")
         self.upload_mode_public.grid(row=8, column=1, padx=(0, 100), sticky=S)
@@ -116,13 +116,12 @@ class CreateGUI:
     def create_project(self):
         self.logic.setup_project(
             self.name_entry.get(),
-            description=self.description_entry.get("1.0", END),
+            description=self.description_entry.get(),
             mode=self.upload_mode.get(),
             upload=True if self.upload.get() == 1 else False,
             directory=self.directory_chosen.get(),
             open_project=True if self.open.get() == 1 else False
             )
-        self.window.destroy()
 
 
 
