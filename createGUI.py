@@ -1,4 +1,6 @@
 from tkinter import *
+import tkinter.filedialog as filedialog
+import os
 
 
 class CreateGUI:
@@ -7,44 +9,110 @@ class CreateGUI:
         self.create_gui()
 
     def create_gui(self):
-        frame = Frame(self.window, width=480, height=640).grid(row=0, column=1, rowspan=11, columnspan=4)
+        self.frame = Frame(self.window, width=480, height=520)
+        self.frame.grid(row=0, column=1, rowspan=7, columnspan=4)
 
-        name = Label(frame, text="Name: ", font="Helvetica 14").grid(
-            row=0, column=0, sticky=E)
-        description = Label(frame, text="Description: ", height=5, font="Helvetica 14").grid(
-            row=1, column=0, rowspan=2, sticky=E)
-        directory = Label(frame, text="Directory: ", font="Helvetica 14").grid(
-            row=3, column=0, sticky=E)
-        auth = Label(frame, text="AuthKey: ", font="Helvetica 16").grid(row=4, column=0)
-        verified_status = Label(frame, text="Status: Not verified", font="Helvetica 16").grid(row=5, column=1, pady=(3, 0),sticky=N)
+        self.name = Label(self.frame, text="Name: ", font="Helvetica 14")
+        self.name.grid(row=0, column=0, pady=5, sticky=E)
+        self.description = Label(self.frame, text="Description: ", height=5, font="Helvetica 14")
+        self.description.grid(row=1, column=0, rowspan=2, sticky=E)
+        self.directory = Label(self.frame, text="Directory: ", font="Helvetica 14")
+        self.directory.grid(row=3, column=0, pady=(0, 20), sticky=E)
+        self.username = Label(self.frame, text="Username: ", font="Helvetica 16")
+        self.username.grid(row=5, column=0, sticky=E)
+        self.password = Label(self.frame, text="Password: ", font="Helvetica 16")
+        self.password.grid(row=6, column=0, sticky=E)
+        self.verified_status = Label(
+            self.frame, text="Status: Not verified", font="Helvetica 16")
+        self.verified_status.grid(row=7, column=1, pady=(3, 0), sticky=N)
 
-        name_entry = Text(frame, width=25, height=1, font="Helvetica 16").grid(
-            row=0, column=1, columnspan=2, sticky=W)
-        description_entry = Text(frame, width=40, height=10, font="Helvetica 12").grid(
-            row=1, column=1, columnspan=2, rowspan=2, sticky=W)
-        directory_chosen = Text(frame, width=26, height=1, font="Helvetica 14").grid(
-            row=3, column=1, columnspan=2, sticky=W)
-        auth_entry = Text(frame, width=26, height=1, font="Helvetica 14").grid(row=4, column=1, columnspan=2, sticky=W)
+        self.name_entry = Entry(self.frame, width=25, font="Helvetica 16")
+        self.name_entry.grid(row=0, column=1, columnspan=2, sticky=W)
+        self.description_entry = Text(self.frame, width=40, height=10, font="Helvetica 12")
+        self.description_entry.grid(row=1, column=1, columnspan=2, rowspan=2, sticky=W)
+        self.directory_chosen = Entry(
+            self.frame, width=32, font="Helvetica 13")
+        self.directory_chosen.grid(row=3, column=1, columnspan=2, pady=(0, 20), sticky=W)
+        self.username_entry = Entry(self.frame, width=26, font="Helvetica 14")
+        self.username_entry.grid(row=5, column=1, columnspan=2, sticky=W)
+        self.password_entry = Entry(self.frame, width=26, font="Helvetica 14", show="*")
+        self.password_entry.grid(row=6, column=1, columnspan=2, sticky=W)
 
-        browse_button = Button(frame, text="Browse", command=self.browse_directory, width=6, font="Helvetica 13").grid(row=3, column=2, padx=(0, 10), sticky=E)
-        verify_button = Button(frame, text="Verify", command=self.verify_auth, width=6, font="Helvetica 13").grid(row=4, column=2, padx=(0, 10), sticky=E)
+
+        self.browse_button = Button(self.frame, text="Browse", command=self.browse_directory,
+                               width=6, font="Helvetica 13")
+        self.browse_button.grid(row=3, column=2, padx=(0, 2), pady=(0, 18), sticky=E)
         self.upload_var = IntVar(value=1)
-        upload_to_github = Checkbutton(frame, text="Upload to Github", variable=self.upload_var, font="Helvetica 16").grid(row=3, column=1, sticky=S, pady=(40, 0))
+        self.verify_button = Button(
+            self.frame, text="Verify", command=self.verify_auth, width=6, font="Helvetica 13")
+        self.verify_button.grid(row=5, column=2, padx=(0, 3), rowspan=2, sticky=E)
+        self.upload_to_github = Checkbutton(self.frame, text="Upload to Github", variable=self.upload_var,
+                                       command=self.upload_choice, font="Helvetica 16")
+        self.upload_to_github.grid(row=4, column=1, pady=(0, 0), sticky=N)
+        self.open = IntVar(value=1)
+        self.open_project = Checkbutton(self.frame, text="Open Project", variable=self.open,
+                                   font="Helvetica 16")
+        self.open_project.grid(row=9, column=1, sticky=N)
+        self.cancel_button = Button(
+            self.frame, text="Cancel", command=self.cancel_creation, width=6, font="Helvetica 16")
+        self.cancel_button.grid(row=10, column=0, pady=(0, 5), padx=(5, 0), sticky=W)
+        self.create_button = Button(
+            self.frame, text="Create", command=self.create_project, width=6, font="Helvetica 16")
+        self.create_button.grid(row=10, column=2, pady=(0, 5), sticky=E)
 
         self.upload_mode = StringVar(value="Public")
-        upload_mode_public = Radiobutton(frame, text="Public", value="Public", variable=self.upload_mode, font="Helvetica 14").grid(row=5, column=1, padx=(0, 100), sticky=S)
-        upload_mode_private = Radiobutton(frame, text="Private", value="Private", variable=self.upload_mode, font="Helvetica 14").grid(row=5, column=1, padx=(100, 0), sticky=S)
+        self.upload_mode_public = Radiobutton(self.frame, text="Public", value="Public", variable=self.upload_mode,
+                                         font="Helvetica 14")
+        self.upload_mode_public.grid(row=8, column=1, padx=(0, 100), sticky=S)
+        self.upload_mode_private = Radiobutton(self.frame, text="Private", value="Private", variable=self.upload_mode,
+                                          font="Helvetica 14")
+        self.upload_mode_private.grid(row=8, column=1, padx=(100, 0), sticky=S)
+
+    def upload_choice(self):
+        if self.upload_var.get() == 1:
+            self.verify_button.config(state=ACTIVE)
+            self.username.config(state=NORMAL)
+            self.username_entry.config(state=NORMAL)
+            self.password.config(state=NORMAL)
+            self.password_entry.config(state=NORMAL)
+            self.verified_status.config(state=NORMAL)
+            self.upload_mode_public.config(state=ACTIVE)
+            self.upload_mode_private.config(state=ACTIVE)
+        else:
+            self.verify_button.config(state=DISABLED)
+            self.username.config(state=DISABLED)
+            self.username_entry.config(state=DISABLED)
+            self.password.config(state=DISABLED)
+            self.password_entry.config(state=DISABLED)
+            self.verified_status.config(state=DISABLED)
+            self.upload_mode_public.config(state=DISABLED)
+            self.upload_mode_private.config(state=DISABLED)
 
     def browse_directory(self):
-        pass
+        """
+        Opens a folder selection dialog to choose the save location
+        """
+        choice = filedialog.askdirectory(
+            initialdir=os.getcwd(), title="Select the project save location")
+
+        if choice:
+            self.directory_chosen.delete(1.0, END)
+            self.directory_chosen.insert(1.0, choice)
 
     def verify_auth(self):
         pass
 
+    def cancel_creation(self):
+        pass
+
+    def create_project(self):
+        pass
+
+
 if __name__ == "__main__":
     create = Tk()
     create.title("Project Auto-Creater")
-    create.geometry("480x640")
+    create.geometry("480x520")
     # create.option_add("*Font", "Helvetica 12")
     create.resizable(FALSE, FALSE)
     gui = CreateGUI(create)
