@@ -1,11 +1,14 @@
 from tkinter import *
 import tkinter.filedialog as filedialog
 import os
+import createLogic
 
 
 class CreateGUI:
     def __init__(self, window):
         self.window = window
+        self.logic = createLogic.CreateProject()
+
         self.create_gui()
 
     def create_gui(self):
@@ -96,17 +99,22 @@ class CreateGUI:
             initialdir=os.getcwd(), title="Select the project save location")
 
         if choice:
-            self.directory_chosen.delete(1.0, END)
-            self.directory_chosen.insert(1.0, choice)
+            self.directory_chosen.delete(0, END)
+            self.directory_chosen.insert(0, choice)
 
     def verify_auth(self):
-        pass
+        result = self.logic.login_successful(self.username_entry.get(), self.password_entry.get())
+        if result:
+            self.verified_status.config(text="Status: Verified")
+        else:
+            self.verified_status.config(text="Status: Invalid Credentials")
 
     def cancel_creation(self):
-        pass
+        self.window.destroy()
 
     def create_project(self):
-        pass
+        self.logic.setup_project(self.name_entry.get(), directory=self.directory_chosen.get())
+
 
 
 if __name__ == "__main__":
