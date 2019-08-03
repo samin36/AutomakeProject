@@ -17,41 +17,41 @@ class CreateGUI:
 
         self.name = Label(self.frame, text="Name: ", font="Helvetica 14")
         self.name.grid(row=0, column=0, pady=5, sticky=E)
-        self.description = Label(self.frame, text="Description: ", height=5, font="Helvetica 14")
-        self.description.grid(row=1, column=0, rowspan=2, sticky=E)
+        self.readme = Label(self.frame, text="README: ", height=5, font="Helvetica 14")
+        self.readme.grid(row=6, column=0, rowspan=2, sticky=E)
         self.directory = Label(self.frame, text="Directory: ", font="Helvetica 14")
-        self.directory.grid(row=3, column=0, pady=(0, 20), sticky=E)
-        self.username = Label(self.frame, text="Username: ", font="Helvetica 16")
-        self.username.grid(row=5, column=0, sticky=E)
-        self.password = Label(self.frame, text="Password: ", font="Helvetica 16")
-        self.password.grid(row=6, column=0, sticky=E)
+        self.directory.grid(row=1, column=0, pady=(0, 20), sticky=E)
+        self.username = Label(self.frame, text="Username: ", font="Helvetica 14")
+        self.username.grid(row=3, column=0, sticky=E)
+        self.password = Label(self.frame, text="Password: ", font="Helvetica 14")
+        self.password.grid(row=4, column=0, sticky=E)
         self.verified_status = Label(
             self.frame, text="Status: Not verified", font="Helvetica 16")
-        self.verified_status.grid(row=7, column=1, pady=(3, 0), sticky=N)
+        self.verified_status.grid(row=5, column=1, pady=(3, 3), sticky=N)
 
         self.name_entry = Entry(self.frame, width=25, font="Helvetica 16")
         self.name_entry.grid(row=0, column=1, columnspan=2, sticky=W)
-        self.description_entry = Text(self.frame, width=40, height=10, font="Helvetica 12")
-        self.description_entry.grid(row=1, column=1, columnspan=2, rowspan=2, sticky=W)
+        self.readme_entry = Text(self.frame, width=40, height=10, font="Helvetica 12")
+        self.readme_entry.grid(row=6, column=1, columnspan=2, rowspan=2, sticky=W)
         self.directory_chosen = Entry(
             self.frame, width=32, font="Helvetica 13")
-        self.directory_chosen.grid(row=3, column=1, columnspan=2, pady=(0, 20), sticky=W)
+        self.directory_chosen.grid(row=1, column=1, columnspan=2, pady=(0, 15), sticky=W)
         self.username_entry = Entry(self.frame, width=26, font="Helvetica 14")
-        self.username_entry.grid(row=5, column=1, columnspan=2, sticky=W)
+        self.username_entry.grid(row=3, column=1, columnspan=2, sticky=W)
         self.password_entry = Entry(self.frame, width=26, font="Helvetica 14", show="*")
-        self.password_entry.grid(row=6, column=1, columnspan=2, sticky=W)
+        self.password_entry.grid(row=4, column=1, columnspan=2, sticky=W)
 
 
         self.browse_button = Button(self.frame, text="Browse", command=self.browse_directory,
                                width=6, font="Helvetica 13")
-        self.browse_button.grid(row=3, column=2, padx=(0, 2), pady=(0, 18), sticky=E)
+        self.browse_button.grid(row=1, column=2, pady=(0, 18), sticky=E)
         self.upload = IntVar(value=0)
         self.verify_button = Button(
             self.frame, text="Verify", command=self.verify_auth, width=6, font="Helvetica 13")
-        self.verify_button.grid(row=5, column=2, padx=(0, 3), rowspan=2, sticky=E)
+        self.verify_button.grid(row=3, column=2, padx=(0, 3), rowspan=2, sticky=E)
         self.upload_to_github = Checkbutton(self.frame, text="Upload to Github", variable=self.upload,
                                        command=self.upload_choice, font="Helvetica 16")
-        self.upload_to_github.grid(row=4, column=1, pady=(0, 0), sticky=N)
+        self.upload_to_github.grid(row=2, column=1, pady=(0, 0), sticky=N)
         self.open = IntVar(value=1)
         self.open_project = Checkbutton(self.frame, text="Open Project", variable=self.open,
                                    font="Helvetica 16")
@@ -82,6 +82,8 @@ class CreateGUI:
             self.verified_status.config(state=NORMAL)
             self.upload_mode_public.config(state=ACTIVE)
             self.upload_mode_private.config(state=ACTIVE)
+            self.readme.config(state=NORMAL)
+            self.readme_entry.config(state=NORMAL)
         else:
             self.verify_button.config(state=DISABLED)
             self.username.config(state=DISABLED)
@@ -91,6 +93,8 @@ class CreateGUI:
             self.verified_status.config(state=DISABLED)
             self.upload_mode_public.config(state=DISABLED)
             self.upload_mode_private.config(state=DISABLED)
+            self.readme.config(state=DISABLED)
+            self.readme_entry.config(state=DISABLED)
 
     def browse_directory(self):
         """
@@ -116,7 +120,7 @@ class CreateGUI:
     def create_project(self):
         self.logic.setup_project(
             self.name_entry.get(),
-            description=self.description_entry.get("1.0", END),
+            readme=self.readme_entry.get("1.0", END),
             mode=self.upload_mode.get(),
             upload=True if self.upload.get() == 1 else False,
             directory=self.directory_chosen.get(),

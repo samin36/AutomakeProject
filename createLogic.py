@@ -8,7 +8,7 @@ class CreateProject():
 
     def __init__(self):
         self.proj_name = None
-        self.description = None
+        self.readme = None
         self.private_mode = None
         self.upload = None
         self.github_obj = None
@@ -25,14 +25,14 @@ class CreateProject():
         except GithubException:
             return False
 
-    def setup_project(self, proj_name, description="", mode="PRIVATE", upload=False, directory=os.getcwd(), open_project=True):
+    def setup_project(self, proj_name, readme="", mode="PRIVATE", upload=False, directory=os.getcwd(), open_project=True):
         """
-        Takes in the project name, description, mode (private or public),
+        Takes in the project name, readme, mode (private or public),
         a boolean variable upload (True=upload to github, False=otherwise),
         and the directory
         """
         self.proj_name = proj_name.strip()
-        self.description = description.strip()
+        self.readme = readme.strip()
         self.private_mode = True if mode.upper() == "PRIVATE" else False
         self.upload = upload
         self.directory = directory.strip()
@@ -46,8 +46,8 @@ class CreateProject():
             os.chdir(self.directory)
             os.mkdir(self.proj_name)
             os.chdir(f"./{self.proj_name}")
-            print(self.description)
-            print(repr(self.description))
+            self.readme = self.readme.replace("\n", " & echo ")
+            self.git_command(f'(echo {self.readme}) >> README.md')
             if self.upload:
                 self.setup_github_repo()
             if self.open_project:
@@ -57,16 +57,15 @@ class CreateProject():
         """ Sets up a github repository for the project using the PyGithub
             module:
             1) Adds a readme
-            2) Adds project description
+            2) Adds project readme
             3) Configures the mode: Public or Private
         """
-        self.git_command(f'echo {self.description} >> README.md')
+        self.git_command(f'echo {self.readme} >> README.md')
         self.git_command("git init")
 
         repo = self.github_obj.get_user().create_repo(
             name=self.proj_name,
             private=self.private_mode,
-            description=self.description
         )
         url = repo.html_url
         self.git_command(f"git remote add origin {url}")
