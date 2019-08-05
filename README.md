@@ -7,14 +7,16 @@ Automake is a Python GUI application that allows users to easily create new proj
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install Automake.
 
 ```bash
-pip install automake
+pip install Automate-Project
 ```
 
+Alternatively, you can download the createGUI.exe executable to run the application.
+
 ## Usage
-Type the following command in terminal
+Type the following command in terminal. It should load a GUI application.
 
 ```bash
-python automake
+automake
 ```
 Note that only python3 is supported at this point.
 
