@@ -2,6 +2,8 @@
 
 Automake is a Python GUI application that allows users to easily create new projects and push to Github.
 
+![](https://github.com/samin36/AutomateProject/blob/master/demo/example.gif)
+
 ## Installation
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install Automake.
