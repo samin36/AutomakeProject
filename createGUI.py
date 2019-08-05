@@ -144,9 +144,7 @@ class CreateGUI:
         else:
             messagebox.showerror("Error", "Please make sure project name and directory are filled out")
 
-
-
-if __name__ == "__main__":
+def main():
     create = Tk()
     create.title("Project Auto-Creater")
     create.geometry("480x520")
@@ -154,3 +152,6 @@ if __name__ == "__main__":
     create.resizable(FALSE, FALSE)
     gui = CreateGUI(create)
     create.mainloop()
+
+if __name__ == "__main__":
+    main()
