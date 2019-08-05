@@ -10,7 +10,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install Automak
 pip install Automate-Project
 ```
 
-Alternatively, you can download the createGUI.exe executable to run the application.
+Alternatively, you can download the Automake.exe executable to run the application.
 
 ## Usage
 Type the following command in terminal. It should load a GUI application.
