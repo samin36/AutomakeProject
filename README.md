@@ -1,1 +1,25 @@
-A python GUI application to automatically create a project and upload it to github 
+# Automake
+
+Automake is a Python GUI application that allows users to easily create new projects and push to Github.
+
+## Installation
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install Automake.
+
+```bash
+pip install automake
+```
+
+## Usage
+Type the following command in terminal
+
+```bash
+python automake
+```
+Note that only python3 is supported at this point.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)

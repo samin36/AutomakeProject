@@ -1,10 +1,14 @@
 from tkinter import *
 import tkinter.filedialog as filedialog
+from tkinter import messagebox
 import os
 import createLogic
 
 
 class CreateGUI:
+    """
+        The GUI part is built using the Tkinter library
+    """
     def __init__(self, window):
         self.window = window
         self.logic = createLogic.CreateProject()
@@ -73,6 +77,10 @@ class CreateGUI:
         self.upload_choice()
 
     def upload_choice(self):
+        """
+            Disables the appropriate elements when the user decides to not
+            upload the project to Github
+        """
         if self.upload.get() == 1:
             self.verify_button.config(state=ACTIVE)
             self.username.config(state=NORMAL)
@@ -113,20 +121,28 @@ class CreateGUI:
             self.verified_status.config(text="Status: Verified")
         else:
             self.verified_status.config(text="Status: Invalid Credentials")
+            messagebox.showerror("Error", "Invalid Credentials. Please check username and password")
 
     def cancel_creation(self):
         self.window.destroy()
 
     def create_project(self):
-        self.logic.setup_project(
-            self.name_entry.get(),
-            readme=self.readme_entry.get("1.0", END),
-            mode=self.upload_mode.get(),
-            upload=True if self.upload.get() == 1 else False,
-            directory=self.directory_chosen.get(),
-            open_project=True if self.open.get() == 1 else False
-            )
-        self.window.destroy()
+        if self.name_entry.get() and self.directory_chosen.get():
+            msg, error_code = self.logic.setup_project(
+                self.name_entry.get(),
+                readme=self.readme_entry.get("1.0", END),
+                mode=self.upload_mode.get(),
+                upload=True if self.upload.get() == 1 else False,
+                directory=self.directory_chosen.get(),
+                open_project=True if self.open.get() == 1 else False
+                )
+            if error_code == 1:
+                messagebox.showerror("Error", msg)
+            else:
+                messagebox.showinfo("Success", msg)
+                self.window.destroy()
+        else:
+            messagebox.showerror("Error", "Please make sure project name and directory are filled out")
 
 
 
